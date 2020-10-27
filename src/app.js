@@ -1,4 +1,4 @@
-import {bresenhamLine} from './helpers.js';
+import {bresenhamLine, getImage, toBlob} from './helpers.js';
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d', {
@@ -25,3 +25,19 @@ canvas.addEventListener('pointermove', event => {
 canvas.addEventListener('pointerup', () => {
     previousPoint = null;
 });
+
+const fileOptions = {
+    types: [{
+        description: 'PNG Files',
+        accept: {'image/png': ['.png']}
+    }]
+}
+
+const btnSave = document.querySelector('#save');
+btnSave.addEventListener('click', async () => {
+    const blob = await toBlob(canvas);
+    const handle = await window.showSaveFilePicker(fileOptions);
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+})
