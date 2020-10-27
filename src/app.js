@@ -40,4 +40,12 @@ btnSave.addEventListener('click', async () => {
     const writable = await handle.createWritable();
     await writable.write(blob);
     await writable.close();
-})
+});
+
+const btnOpen = document.querySelector('#open');
+btnOpen.addEventListener('click', async () => {
+    const [handle] = await window.showOpenFilePicker(fileOptions);
+    const file = await handle.getFile();
+    const image = await getImage(file);
+    ctx.drawImage(image, 0, 0);
+});
